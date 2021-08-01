@@ -18,12 +18,12 @@ import Files
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Model")
 
 /// Agregat des éléments du Model environmental
-final class Model: ObservableObject, CustomStringConvertible {
+public final class Model: ObservableObject, CustomStringConvertible {
 
     // MARK: - Properties
     
-    @Published var humanLife: HumanLife
-    var humanLifeModel: HumanLife.Model {
+    @Published public var humanLife: HumanLife
+    public var humanLifeModel: HumanLife.Model {
         if humanLife.model == nil {
             customLog.log(level: .fault, "Tentative d'accès au modèle HumanLife.model : non initialisé")
             fatalError()
@@ -32,8 +32,8 @@ final class Model: ObservableObject, CustomStringConvertible {
         }
     }
     
-    @Published var retirement: Retirement
-    var retirementModel: Retirement.Model {
+    @Published public var retirement: Retirement
+    public var retirementModel: Retirement.Model {
         if retirement.model == nil {
             customLog.log(level: .fault, "Tentative d'accès au modèle Retirement.model : non initialisé")
             fatalError()
@@ -42,8 +42,8 @@ final class Model: ObservableObject, CustomStringConvertible {
         }
     }
     
-    @Published var economy: Economy
-    var economyModel: Economy.Model {
+    @Published public var economy: Economy
+    public var economyModel: Economy.Model {
         if economy.model == nil {
             customLog.log(level: .fault, "Tentative d'accès au modèle Economy.model : non initialisé")
             fatalError()
@@ -52,8 +52,8 @@ final class Model: ObservableObject, CustomStringConvertible {
         }
     }
     
-    @Published var socioEconomy: SocioEconomy
-    var socioEconomyModel: SocioEconomy.Model {
+    @Published public var socioEconomy: SocioEconomy
+    public var socioEconomyModel: SocioEconomy.Model {
         if socioEconomy.model == nil {
             customLog.log(level: .fault, "Tentative d'accès au modèle SocioEconomy.model : non initialisé")
             fatalError()
@@ -62,8 +62,8 @@ final class Model: ObservableObject, CustomStringConvertible {
         }
     }
     
-    @Published var unemployment: Unemployment
-    var unemploymentModel: Unemployment.Model {
+    @Published public var unemployment: Unemployment
+    public var unemploymentModel: Unemployment.Model {
         if unemployment.model == nil {
             customLog.log(level: .fault, "Tentative d'accès au modèle Unemployment.model : non initialisé")
             fatalError()
@@ -72,12 +72,12 @@ final class Model: ObservableObject, CustomStringConvertible {
         }
     }
     
-    var isModified: Bool {
+    public var isModified: Bool {
         humanLife.isModified || retirement.isModified
             || economy.isModified || socioEconomy.isModified || unemployment.isModified
     }
     
-    var description: String {
+    public var description: String {
         return """
         
         MODEL: HumanLife
@@ -109,7 +109,7 @@ final class Model: ObservableObject, CustomStringConvertible {
     /// Pour pouvoir utiliser cet objet il faut d'abord initialiser les modèles avec
     /// une méthode: init(fromBundle bundle: Bundle) ou loadFromJSON(fromFolder folder: Folder)
     /// - Note: Nécessaire pour une initialization dans AppMain au lancement de l'application
-    init() {
+    public init() {
         humanLife    = HumanLife()
         retirement   = Retirement()
         economy      = Economy()
@@ -123,7 +123,7 @@ final class Model: ObservableObject, CustomStringConvertible {
     ///                        être gérées en dehors de cette méthode.
     /// - Parameters:
     ///   - bundle: le bundle dans lequel chercher les fichiers JSON
-    init(fromBundle bundle: Bundle) {
+    public init(fromBundle bundle: Bundle) {
         humanLife    = HumanLife(fromBundle    : Bundle.main)
         retirement   = Retirement(fromBundle   : Bundle.main)
         economy      = Economy(fromBundle      : Bundle.main)
@@ -141,7 +141,7 @@ final class Model: ObservableObject, CustomStringConvertible {
     /// - Warning: les dépendance externes entre le Model et les objets applicatifs doivent
     ///                        être gérées en dehors de cette méthode.
     /// - Parameter folder: dossier chargé par l'utilisateur
-    func loadFromJSON(fromFolder folder: Folder) throws {
+    public func loadFromJSON(fromFolder folder: Folder) throws {
         humanLife    = try HumanLife(fromFolder    : folder)
         retirement   = try Retirement(fromFolder   : folder)
         economy      = try Economy(fromFolder      : folder)
@@ -154,7 +154,7 @@ final class Model: ObservableObject, CustomStringConvertible {
 
     /// Enregistrer tous les modèles dans des fichiers JSON contenu dans le `folder`
     /// - Parameter folder: dossier chargé par l'utilisateur
-    func saveAsJSON(toFolder folder: Folder) throws {
+    public func saveAsJSON(toFolder folder: Folder) throws {
         try humanLife.saveAsJSON(toFolder: folder)
         try retirement.saveAsJSON(toFolder: folder)
         try economy.saveAsJSON(toFolder: folder)
@@ -164,7 +164,7 @@ final class Model: ObservableObject, CustomStringConvertible {
     
     /// Enregistrer tous les modèles dans des fichiers JSON contenu dans le `folder`
     /// - Parameter folder: dossier chargé par l'utilisateur
-    func saveAsJSON(toBundle bundle: Bundle) throws {
+    public func saveAsJSON(toBundle bundle: Bundle) throws {
         humanLife.saveAsJSON(toBundle: bundle)
         retirement.saveAsJSON(toBundle: bundle)
         economy.saveAsJSON(toBundle: bundle)
@@ -173,7 +173,7 @@ final class Model: ObservableObject, CustomStringConvertible {
     }
 
     /// Gérer les dépendances entre modèles
-    func manageInternalDependencies() {
+    public func manageInternalDependencies() {
         /// Injection de Fiscal
         // récupérer une copie du singleton
         let fiscalModel = Fiscal.model
